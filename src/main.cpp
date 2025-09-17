@@ -13,10 +13,9 @@ int main(){
 
   remote.begin();
 
-  int i = 0;
   while (true){
     remote.receiver();
-    // Serial.println("Receiving");
+    Serial.println("vs Code");
     delay(1000);
     // yield();
   }
