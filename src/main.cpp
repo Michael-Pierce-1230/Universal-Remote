@@ -2,8 +2,8 @@
 #include "RemoteInterface.h"
 // #include <IRremote.hpp>
 
-int TX_PIN = 7;
-int RX_PIN = 8;
+const int TX_PIN = 13;
+const int RX_PIN = 12;
 
 int main(){
   init();
@@ -13,9 +13,13 @@ int main(){
 
   remote.begin();
 
+  
+
   while (true){
+    // remote.receiver();
+    // Serial.println("vs Code");
+    remote.sendVolumeDown();
     remote.receiver();
-    Serial.println("vs Code");
     delay(1000);
     // yield();
   }

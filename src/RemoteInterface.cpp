@@ -1,5 +1,6 @@
 #include "RemoteInterface.h"
 #include <IRremote.hpp>
+
 // RemoteInterface::RemoteInterface(uint16_t txPin, uint16_t rxPin): irsend(txPin), irrecv(rxPin) {}
 RemoteInterface::RemoteInterface(int txPin, int rxPin){
     this->txPin = txPin;
@@ -8,6 +9,7 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
 
 void RemoteInterface::begin(){
   IrReceiver.begin(this->rxPin, ENABLE_LED_FEEDBACK);
+  IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
 }
 
 void RemoteInterface::receiver() {
@@ -25,6 +27,9 @@ void RemoteInterface::sendVolumeUp(){
 
 void RemoteInterface::sendVolumeDown(){
   //  sendSamsung(SAMSUNG_VOL_DOWN); 
+  // Serial.println("Sending msg");
+  // IrSender.sendSamsung(0x7, 0x07, 0);
+  IrSender.sendSAMSUNG(0xE0E0E01F, 32);
   }
 
 void RemoteInterface::sendPower(){
