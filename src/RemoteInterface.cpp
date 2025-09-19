@@ -10,6 +10,7 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
 void RemoteInterface::begin(){
   IrReceiver.begin(this->rxPin, ENABLE_LED_FEEDBACK);
   IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
+  // IrReceiver.disableIRIn();
 }
 
 void RemoteInterface::receiver() {

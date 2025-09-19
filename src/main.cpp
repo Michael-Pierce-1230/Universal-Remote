@@ -2,32 +2,50 @@
 #include "RemoteInterface.h"
 // #include <IRremote.hpp>
 
-const int TX_PIN = 13;
-const int RX_PIN = 12;
+const int TX_PIN = 16;
+const int RX_PIN = 13;
+
+void setup();
+void loop();
+
+RemoteInterface remote(TX_PIN, RX_PIN);
+
 
 int main(){
   init();
-  Serial.begin(9600);
 
-  RemoteInterface remote(TX_PIN, RX_PIN);
+  setup();
 
-  remote.begin();
+  loop();
+
+  // while (true){
+  //   // remote.receiver();
+  //   // Serial.println("vs Code");
+  //   remote.sendVolumeDown();
+  //   remote.receiver();
+  //   delay(1000);
+  //   // yield();
+  // }
+
+  return 0;
+}
+
+void setup(){
+  Serial.begin(115200);
 
   
+  remote.begin();
+  
+}
 
-  while (true){
-    // remote.receiver();
+void loop(){
+   // remote.receiver();
     // Serial.println("vs Code");
     remote.sendVolumeDown();
     remote.receiver();
     delay(1000);
     // yield();
-  }
-
-  return 0;
 }
-
-
 
 // #include <IRremote.hpp>
 
