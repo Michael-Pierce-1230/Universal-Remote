@@ -24,7 +24,7 @@ public:
   void receiver();
 
   void SelectProfile(int select);
-  void AssignButton();
+  void AssignButton(int button);
 
   // high level transmit commands
   void sendVolumeUp();
