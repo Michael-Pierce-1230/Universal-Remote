@@ -6,9 +6,10 @@
 
 // RemoteInterface::RemoteInterface(uint16_t txPin, uint16_t rxPin): irsend(txPin), irrecv(rxPin) {}
 RemoteInterface::RemoteInterface(int txPin, int rxPin){
+  // set tx and rx pins
     this->txPin = txPin;
     this->rxPin = rxPin;
-
+    // setup sender 
     IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
    
     
