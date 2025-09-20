@@ -9,8 +9,12 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
   // set tx and rx pins
     this->txPin = txPin;
     this->rxPin = rxPin;
+    
     // setup sender 
     IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
+
+    // select first profile as a default
+    this->currentProfile = this->profiles[0];
    
     
 }
@@ -26,15 +30,13 @@ void RemoteInterface::IRReceive(bool state){
 }
 
 // each method wil need to determine the type of protocol to use
-
 void RemoteInterface::SelectProfile( int select){
-    this->profileSelect = select;
+    this->currentProfile = this->profiles[select];
 }
 
 void RemoteInterface::AssignButton(int button){
   this->IRReceive(true);
   
-
 }
 
 void RemoteInterface::receiver() {
@@ -49,22 +51,22 @@ void RemoteInterface::receiver() {
 }
 
 void RemoteInterface::sendVolumeUp(){
-  //  IrSender.sendSAMSUNG(this->profiles[this->profileSelect].volumeUp, 32); 
+    IrSender.sendSAMSUNG(this->currentProfile.buttons["volumeUp"].rawData,
+                        this->currentProfile.buttons["volumeUp"].bitLength); 
   }
 
 void RemoteInterface::sendVolumeDown(){
-  //  sendSamsung(SAMSUNG_VOL_DOWN); 
-  // Serial.println("Sending msg");
-  // IrSender.sendSamsung(0x7, 0x07, 0);
-  // IrSender.sendSAMSUNG(0xE0E0E01F, 32);
-  // IrSender.sendSAMSUNG(this->profiles[this->profileSelect].volumeDown, 32);
+  IrSender.sendSAMSUNG(this->currentProfile.buttons["volumeDown"].rawData,
+                        this->currentProfile.buttons["volumeDown"].bitLength); 
 }
 
 void RemoteInterface::sendPower(){
-  // IrSender.sendSAMSUNG(this->profiles[this->profileSelect].power, 32);
+  IrSender.sendSAMSUNG(this->currentProfile.buttons["power"].rawData,
+                        this->currentProfile.buttons["power"].bitLength); 
 }
 
 void RemoteInterface::sendMute(){
-  // IrSender.sendSAMSUNG(this->profiles[this->profileSelect].mute, 32);
+  IrSender.sendSAMSUNG(this->currentProfile.buttons["mute"].rawData,
+                        this->currentProfile.buttons["mute"].bitLength); 
 }
 

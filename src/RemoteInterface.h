@@ -11,13 +11,15 @@ class RemoteInterface {
 private:
   int txPin;
   int rxPin;
+  int numProfiles = 3;
   // static array of profiles
   ButtonMap profiles[3];
+
+  ButtonMap currentProfile;
 
 public:
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
-  int profileSelect = 0;
 
   void IRReceive(bool state);
 
