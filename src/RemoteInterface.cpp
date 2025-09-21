@@ -30,13 +30,23 @@ void RemoteInterface::IRReceive(bool state){
 }
 
 // each method wil need to determine the type of protocol to use
-void RemoteInterface::SelectProfile( int select){
+std::string RemoteInterface::SelectProfile( int select){
     this->currentProfile = this->profiles[select];
+    return this->currentProfile.profileName;
 }
 
 void RemoteInterface::AssignButton(int button){
   this->IRReceive(true);
-  
+}
+
+std::string RemoteInterface::getButtonNameFromPin(int pin){
+
+    for(const auto& pair : this->currentProfile.buttons){
+      if(pair.second.pin == pin){
+        return pair.first;
+      }
+    }
+    return ""; // empty string means no  button found for this pin
 }
 
 void RemoteInterface::receiver() {
@@ -50,23 +60,9 @@ void RemoteInterface::receiver() {
     } 
 }
 
-void RemoteInterface::sendVolumeUp(){
-    IrSender.sendSAMSUNG(this->currentProfile.buttons["volumeUp"].rawData,
-                        this->currentProfile.buttons["volumeUp"].bitLength); 
-  }
+void RemoteInterface::sender(std::string command){
+    IrSender.sendSAMSUNG(this->currentProfile.buttons[command].rawData,
+                        this->currentProfile.buttons[command].bitLength); 
 
-void RemoteInterface::sendVolumeDown(){
-  IrSender.sendSAMSUNG(this->currentProfile.buttons["volumeDown"].rawData,
-                        this->currentProfile.buttons["volumeDown"].bitLength); 
-}
-
-void RemoteInterface::sendPower(){
-  IrSender.sendSAMSUNG(this->currentProfile.buttons["power"].rawData,
-                        this->currentProfile.buttons["power"].bitLength); 
-}
-
-void RemoteInterface::sendMute(){
-  IrSender.sendSAMSUNG(this->currentProfile.buttons["mute"].rawData,
-                        this->currentProfile.buttons["mute"].bitLength); 
 }
 

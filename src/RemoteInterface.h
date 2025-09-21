@@ -6,18 +6,20 @@
 // #include <IRrecv.h>
 // #include <IRutils.h>
 #include "ButtonMap.cpp"
+#include "string"
 
 class RemoteInterface {
 private:
   int txPin;
   int rxPin;
   int numProfiles = 3;
-  // static array of profiles
+
+
+public:
+    // static array of profiles
   ButtonMap profiles[3];
 
   ButtonMap currentProfile;
-
-public:
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
 
@@ -25,14 +27,12 @@ public:
 
   void receiver();
 
-  void SelectProfile(int select);
+  std::string SelectProfile(int select);
   void AssignButton(int button);
+  std::string getButtonNameFromPin(int pin);
 
   // high level transmit commands
-  void sendVolumeUp();
-  void sendVolumeDown();
-  void sendPower();
-  void sendMute();
+  void sender(std::string command);
 
 };
 

@@ -1,6 +1,7 @@
 // #include <Arduino.h>
 #include "RemoteInterface.h"
 // #include <IRremote.hpp>
+#include "ButtonMap.h"
 
 const int TX_PIN = 16;
 const int RX_PIN = 13;
@@ -8,7 +9,9 @@ const int RX_PIN = 13;
 void setup();
 void loop();
 
+// RemoteInterface remote(TX_PIN, RX_PIN);
 RemoteInterface remote(TX_PIN, RX_PIN);
+ButtonMap& activeMap = remote.currentProfile;
 
 
 int main(){
@@ -18,50 +21,52 @@ int main(){
 
   loop();
 
-  // while (true){
-  //   // remote.receiver();
-  //   // Serial.println("vs Code");
-  //   remote.sendVolumeDown();
-  //   remote.receiver();
-  //   delay(1000);
-  //   // yield();
-  // }
-
   return 0;
 }
 
 void setup(){
   Serial.begin(115200);
-
+  int numProfiles = sizeof(remote.profiles)/ sizeof(remote.profiles[0]);
   
-  // remote.begin();
   
 }
 
 void loop(){
-   // remote.receiver();
-    // Serial.println("vs Code");
-    remote.sendVolumeDown();
-    remote.receiver();
-    delay(1000);
-    // yield();
+
+  // check for for selected profile
+
+  for(const auto& buttonVal : activeMap.buttons){
+      int pin = buttonVal.second.pin;
+      if(digitalRead(pin) == LOW){
+        std::string button = remote.getButtonNameFromPin(pin);
+        if(!button.empty()){
+          remote.sender(button);
+        }
+      }
+  }
+  
+
+  delay(1000);
+  // yield();
 }
 
-// #include <IRremote.hpp>
+//use code for debouncing buttons
+//  ButtonMap& activeMap = remote.profiles[remote.currentProfileIndex];
 
-// #include <IRremote.hpp>
+//     for (const auto& pair : activeMap.buttons) {
+//         int pin = pair.second.pin;
+//         int state = digitalRead(pin);
 
-// const int IR_RECEIVE_PIN = 7;
+//         if (state == LOW) { // assuming active-low button
+//             unsigned long now = millis();
 
-// void setup(){
-//   Serial.begin(9600);
-//   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK); // start the receiver
-// }
+//             if (now - remote.lastPressTime[pin] > remote.debounceDelay) {
+//                 remote.lastPressTime[pin] = now;
 
-// void loop(){
-//   if (IrReceiver.decode()){
-//     Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
-//     IrReceiver.printIRResultShort(&Serial);
-//     IrReceiver.resume();
-//   }
-// }
+//                 String buttonName = remote.getButtonNameFromPin(pin).c_str();
+//                 if (buttonName.length() > 0) {
+//                     remote.sendButton(buttonName.c_str());
+//                 }
+//             }
+//         }
+//     }

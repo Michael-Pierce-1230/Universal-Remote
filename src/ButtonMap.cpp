@@ -7,11 +7,13 @@ struct ButtonData{
     uint64_t rawData;        // Will be 0
     uint8_t bitLength;    
 
-    ButtonData() : pin(0), protocol(0), rawData(0), bitLength(0) {}  // Default everything to 0
+    ButtonData() :pin(0), protocol(0), rawData(0), bitLength(0) {}  // Default everything to 0
 };
 
 struct ButtonMap{
     std::map<std::string, ButtonData> buttons;
+
+    std::string profileName = "DEFAULT";
 
     ButtonMap(){
         buttons["volumeUp"] = ButtonData();
@@ -23,18 +25,5 @@ struct ButtonMap{
         buttons["mute"] = ButtonData();
         buttons["mute"].pin = 13;
     }
-    // private:
-    //     const int b1 =  4; // D2
-    //     const int b2 =  5; // D1
-    //     const int b3 =  12; // D6
-    //     const int b4 =  13; // D7
-    
-    // public:
-    //     int protocolType = 0; // temp filler. will need to figure out how to determine the protocol
-    //     unsigned int volumeUp = 0x00;
-    //     unsigned int volumeDown = 0x00;
-    //     unsigned int power = 0x00;
-    //     unsigned int mute = 0x00;
-
 };
 
