@@ -1,32 +1,42 @@
 #include "RemoteInterface.h"
 #include <IRremote.hpp>
-// #include <map>
-// #include <string>
-// #include "ButtonMap.cpp"
 
-// RemoteInterface::RemoteInterface(uint16_t txPin, uint16_t rxPin): irsend(txPin), irrecv(rxPin) {}
+
 RemoteInterface::RemoteInterface(int txPin, int rxPin){
   // set tx and rx pins
     this->txPin = txPin;
     this->rxPin = rxPin;
     
-    // setup sender 
-    IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
-
     // select first profile as a default
     this->currentProfile = this->profiles[0];
-   
-    
 }
 
+void RemoteInterface::begin(){
+    for (auto &pair : this->currentProfile.buttons){
+      pinMode(pair.second.pin, INPUT_PULLUP);
+    }
+     // setup sender 
+    IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
+}
 
-void RemoteInterface::IRReceive(bool state){
+void RemoteInterface::checkButtons(){
+    for (auto &pair : this->currentProfile.buttons){
+        const std::string &command = pair.first;
+        ButtonData &data = pair.second;
+
+        int state = digitalRead(data.pin);
+        if (state == LOW) {
+          sender(command, data);
+        }
+    }
+}
+
+void RemoteInterface::IRReceiveState(bool state){
   if(state){
     IrReceiver.begin(this->rxPin, ENABLE_LED_FEEDBACK);
   } else{
     IrReceiver.disableIRIn();
   }
-  
 }
 
 // each method wil need to determine the type of protocol to use
@@ -36,17 +46,7 @@ std::string RemoteInterface::SelectProfile( int select){
 }
 
 void RemoteInterface::AssignButton(int button){
-  this->IRReceive(true);
-}
-
-std::string RemoteInterface::getButtonNameFromPin(int pin){
-
-    for(const auto& pair : this->currentProfile.buttons){
-      if(pair.second.pin == pin){
-        return pair.first;
-      }
-    }
-    return ""; // empty string means no  button found for this pin
+  this->IRReceiveState(true);
 }
 
 void RemoteInterface::receiver() {
@@ -55,14 +55,24 @@ void RemoteInterface::receiver() {
       Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
       IrReceiver.printIRResultShort(&Serial);
       IrReceiver.resume();
-
-      
     } 
 }
 
-void RemoteInterface::sender(std::string command){
-    IrSender.sendSAMSUNG(this->currentProfile.buttons[command].rawData,
-                        this->currentProfile.buttons[command].bitLength); 
+void RemoteInterface::sender(const std::string &command, ButtonData &data){
+    Serial.print("Button pressed: ");
+    Serial.println(command.c_str());
 
+    switch (data.protocol){
+        case LG:
+          IrSender.sendLGRaw(data.rawData, data.bitLength);
+          break;
+
+        case SAMSUNG:
+          IrSender.sendSAMSUNG(data.rawData, data.bitLength);
+          break;
+
+        default:
+            Serial.println("Unknown protocol, nothing sent.");
+            break;
+    }
 }
-

@@ -14,25 +14,32 @@ private:
   int rxPin;
   int numProfiles = 3;
 
+  ButtonMap currentProfile;
+
+  void handleButtonPress(const std::string &name, ButtonData &data);
 
 public:
     // static array of profiles
   ButtonMap profiles[3];
 
-  ButtonMap currentProfile;
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
 
-  void IRReceive(bool state);
+  void begin();
+
+  void checkButtons();
+
+  void IRReceiveState(bool state);
 
   void receiver();
 
   std::string SelectProfile(int select);
+  
   void AssignButton(int button);
+
   std::string getButtonNameFromPin(int pin);
 
-  // high level transmit commands
-  void sender(std::string command);
+  void sender(const std::string &command, ButtonData &data);
 
 };
 

@@ -7,7 +7,9 @@ struct ButtonData{
     uint64_t rawData;        // Will be 0
     uint8_t bitLength;    
 
-    ButtonData() :pin(0), protocol(0), rawData(0), bitLength(0) {}  // Default everything to 0
+    ButtonData(int p = 0, uint8_t proto = 0, uint64_t raw = 0x00, uint8_t len = 0)
+        : pin(p), protocol(proto), rawData(raw), bitLength(len) {}
+
 };
 
 struct ButtonMap{
@@ -15,15 +17,13 @@ struct ButtonMap{
 
     std::string profileName = "DEFAULT";
 
-    ButtonMap(){
-        buttons["volumeUp"] = ButtonData();
-        buttons["volumeUp"].pin = 4;
-        buttons["volumeDown"] = ButtonData();
-        buttons["volumeDown"].pin = 5;
-        buttons["power"] = ButtonData();
-        buttons["power"].pin = 12;
-        buttons["mute"] = ButtonData();
-        buttons["mute"].pin = 13;
-    }
+    // ButtonMap constructor
+    // assign pins to each button data
+    ButtonMap(): buttons({
+            {"volumeUp",   ButtonData(4)},
+            {"volumeDown", ButtonData(5)},
+            {"power",      ButtonData(12)},
+            {"mute",       ButtonData(13)}
+        }) {}
 };
 
