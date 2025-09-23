@@ -28,6 +28,7 @@ void setup(){
   // int numProfiles = sizeof(remote.profiles)/ sizeof(remote.profiles[0]);
   // setup ir transmitter
   remote.begin();
+  remote.IRReceiveState(true);
   
 }
 
@@ -45,9 +46,9 @@ void loop(){
   //       }
   //     }
   // }
-  
+  remote.receiver();
 
-  delay(1000);
+  delay(100);
   // yield();
 }
 

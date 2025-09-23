@@ -9,6 +9,12 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
     
     // select first profile as a default
     this->currentProfile = this->profiles[0];
+    this->currentProfile.buttons["volumeUp"].rawData = 0xE0E0E01F;
+    this->currentProfile.buttons["volumeUp"].bitLength = 32;
+    this->currentProfile.buttons["volumeUp"].protocol = SAMSUNG;
+    this->currentProfile.buttons["volumeDown"].rawData = 0xE0E0D02F;
+    this->currentProfile.buttons["volumeDown"].bitLength = 32;
+    this->currentProfile.buttons["volumeDown"].protocol = SAMSUNG;
 }
 
 void RemoteInterface::begin(){
