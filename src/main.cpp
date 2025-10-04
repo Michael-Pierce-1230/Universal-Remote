@@ -3,8 +3,8 @@
 // #include <IRremote.hpp>
 #include "ButtonMap.h"
 
-const int TX_PIN = 16;
-const int RX_PIN = 13;
+const int TX_PIN = 17;
+const int RX_PIN = 16;
 
 void setup();
 void loop();
@@ -29,11 +29,12 @@ void setup(){
   // setup ir transmitter
   remote.begin();
   remote.IRReceiveState(true);
+  remote.SelectProfile(0);
   
 }
 
 void loop(){
-
+  // Serial.print("Check Buttons");
   remote.checkButtons();
   // check for for selected profile
 
@@ -46,29 +47,12 @@ void loop(){
   //       }
   //     }
   // }
-  remote.receiver();
+
+
+  // remote.receiver();
+
+  
 
   delay(100);
   // yield();
 }
-
-//use code for debouncing buttons
-//  ButtonMap& activeMap = remote.profiles[remote.currentProfileIndex];
-
-//     for (const auto& pair : activeMap.buttons) {
-//         int pin = pair.second.pin;
-//         int state = digitalRead(pin);
-
-//         if (state == LOW) { // assuming active-low button
-//             unsigned long now = millis();
-
-//             if (now - remote.lastPressTime[pin] > remote.debounceDelay) {
-//                 remote.lastPressTime[pin] = now;
-
-//                 String buttonName = remote.getButtonNameFromPin(pin).c_str();
-//                 if (buttonName.length() > 0) {
-//                     remote.sendButton(buttonName.c_str());
-//                 }
-//             }
-//         }
-//     }

@@ -26,15 +26,48 @@ void RemoteInterface::begin(){
 }
 
 void RemoteInterface::checkButtons(){
-    for (auto &pair : this->currentProfile.buttons){
-        const std::string &command = pair.first;
-        ButtonData &data = pair.second;
 
-        int state = digitalRead(data.pin);
-        if (state == LOW) {
-          sender(command, data);
+  // unsigned long currentTime = millis();
+  
+  for (auto &pair : this->currentProfile.buttons){
+
+      bool pinState = digitalRead(pair.second.pin);
+      // Serial.println(pair.second.stableState);
+
+      if(pinState != pair.second.lastButtonState){
+        // reset debounce time
+        pair.second.lastDebounceTime = millis();
+      }
+
+      if ((millis() - pair.second.lastDebounceTime) > debounceDelay){
+        // only update stable state if it really changed
+        if (pinState != pair.second.buttonState){
+          pair.second.buttonState = pinState;
+
+          if (pair.second.buttonState == LOW){
+            const std::string &command = pair.first;
+            ButtonData &data = pair.second;
+
+            sender(command, data);
+          }
         }
-    }
+      }
+      pair.second.lastButtonState = pinState;
+  }
+
+
+
+
+
+    // for (auto &pair : this->currentProfile.buttons){
+    //     const std::string &command = pair.first;
+    //     ButtonData &data = pair.second;
+
+    //     int state = digitalRead(data.pin);
+    //     if (state == LOW) {
+    //       sender(command, data);
+    //     }
+    // }
 }
 
 void RemoteInterface::IRReceiveState(bool state){
@@ -45,7 +78,7 @@ void RemoteInterface::IRReceiveState(bool state){
   }
 }
 
-// each method wil need to determine the type of protocol to use
+// each method will need to determine the type of protocol to use
 std::string RemoteInterface::SelectProfile( int select){
     this->currentProfile = this->profiles[select];
     return this->currentProfile.profileName;

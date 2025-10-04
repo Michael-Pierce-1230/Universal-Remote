@@ -1,14 +1,19 @@
 #include "map"
 #include "string"
+#include <Arduino.h>
 
 struct ButtonData{
     int pin;
     uint8_t protocol;  // Will be 0 (UNKNOWN) when zero-initialized
     uint64_t rawData;        // Will be 0
-    uint8_t bitLength;    
+    uint8_t bitLength;
+    bool buttonState;
+    bool lastButtonState;
+    unsigned long lastDebounceTime = 0;
 
-    ButtonData(int p = 0, uint8_t proto = 0, uint64_t raw = 0x00, uint8_t len = 0)
-        : pin(p), protocol(proto), rawData(raw), bitLength(len) {}
+
+    ButtonData(int p = 0, uint8_t proto = 0, uint64_t raw = 0x00, uint8_t len = 0, bool ls = HIGH, bool lbs = HIGH)
+        : pin(p), protocol(proto), rawData(raw), bitLength(len), buttonState(ls), lastButtonState(lbs) {}
 
 };
 

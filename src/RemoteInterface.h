@@ -13,10 +13,13 @@ private:
   int txPin;
   int rxPin;
   int numProfiles = 3;
+  const unsigned long debounceDelay = 50;
 
   ButtonMap currentProfile;
 
-  void handleButtonPress(const std::string &name, ButtonData &data);
+  // bool isButtonPressed();
+
+  // void handleButtonPress(const std::string &name, ButtonData &data);
 
 public:
     // static array of profiles
