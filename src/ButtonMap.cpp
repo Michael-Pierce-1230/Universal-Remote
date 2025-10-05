@@ -28,7 +28,8 @@ struct ButtonMap{
             {"volumeUp",   ButtonData(4)},
             {"volumeDown", ButtonData(5)},
             {"power",      ButtonData(12)},
-            {"mute",       ButtonData(13)}
+            {"mute",       ButtonData(13)},
+            {"set",        ButtonData(25)}
         }) {}
 };
 

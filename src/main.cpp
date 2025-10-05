@@ -29,7 +29,6 @@ void setup(){
   // setup ir transmitter
   remote.begin();
   remote.IRReceiveState(true);
-  remote.SelectProfile(0);
   
 }
 
@@ -53,6 +52,6 @@ void loop(){
 
   
 
-  delay(100);
+  // delay(100);
   // yield();
 }

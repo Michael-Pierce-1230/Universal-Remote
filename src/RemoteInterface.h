@@ -13,20 +13,28 @@ private:
   int txPin;
   int rxPin;
   int numProfiles = 3;
-  const unsigned long debounceDelay = 50;
+  
+  const unsigned long debounceDelay = 20;
 
-  ButtonMap currentProfile;
+  
 
   // bool isButtonPressed();
 
   // void handleButtonPress(const std::string &name, ButtonData &data);
 
 public:
+  int selectedProfile = 0;
+  ButtonMap currentProfile;
     // static array of profiles
   ButtonMap profiles[3];
 
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
+      // : txPin(txPin), rxPin(rxPin){
+      //   currentProfile = &profiles[0];
+      //   // currentProfile->profileName = "SAMSUNG PROFILE";
+
+      // }
 
   void begin();
 
@@ -36,7 +44,7 @@ public:
 
   void receiver();
 
-  std::string SelectProfile(int select);
+  void ChangeProfile();
   
   void AssignButton(int button);
 
