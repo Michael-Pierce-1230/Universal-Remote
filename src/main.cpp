@@ -30,6 +30,7 @@ void setup(){
   remote.begin();
   remote.IRReceiveState(true);
   
+  
 }
 
 void loop(){
@@ -48,7 +49,7 @@ void loop(){
   // }
 
 
-  // remote.receiver();
+  remote.receiver();
 
   
 

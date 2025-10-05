@@ -28,6 +28,8 @@ public:
     // static array of profiles
   ButtonMap profiles[3];
 
+  BaseButton profileMode(int p = 25);
+
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
       // : txPin(txPin), rxPin(rxPin){

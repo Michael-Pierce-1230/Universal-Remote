@@ -80,6 +80,7 @@ void RemoteInterface::checkButtons(){
 }
 
 void RemoteInterface::IRReceiveState(bool state){
+  
   if(state){
     IrReceiver.begin(this->rxPin, ENABLE_LED_FEEDBACK);
   } else{

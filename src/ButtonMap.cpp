@@ -2,18 +2,31 @@
 #include "string"
 #include <Arduino.h>
 
-struct ButtonData{
-    int pin;
-    uint8_t protocol;  // Will be 0 (UNKNOWN) when zero-initialized
-    uint64_t rawData;        // Will be 0
-    uint8_t bitLength;
-    bool buttonState;
-    bool lastButtonState;
+struct BaseButton{
+    int pin = 0;
+    bool buttonState = HIGH;
+    bool lastButtonState = HIGH;
     unsigned long lastDebounceTime = 0;
 
+    BaseButton() = default;
+    BaseButton(int p) : pin(p) {} // constructor that sets pin
 
-    ButtonData(int p = 0, uint8_t proto = 0, uint64_t raw = 0x00, uint8_t len = 0, bool ls = HIGH, bool lbs = HIGH)
-        : pin(p), protocol(proto), rawData(raw), bitLength(len), buttonState(ls), lastButtonState(lbs) {}
+};
+
+struct ButtonData : BaseButton{
+    // int pin;
+    uint8_t protocol = 0;  // Will be 0 (UNKNOWN) when zero-initialized
+    uint64_t rawData = 0;        // Will be 0
+    uint8_t bitLength = 0;
+    // bool buttonState;
+    // bool lastButtonState;
+    // unsigned long lastDebounceTime = 0;
+
+    // constructor to allow pin initialization
+    ButtonData() = default;
+    ButtonData(int p) : BaseButton(p) {}
+    // ButtonData(int p = 0, uint8_t proto = 0, uint64_t raw = 0x00, uint8_t len = 0)
+    //     : pin(p), protocol(proto), rawData(raw), bitLength(len){}
 
 };
 
@@ -28,8 +41,7 @@ struct ButtonMap{
             {"volumeUp",   ButtonData(4)},
             {"volumeDown", ButtonData(5)},
             {"power",      ButtonData(12)},
-            {"mute",       ButtonData(13)},
-            {"set",        ButtonData(25)}
+            {"mute",       ButtonData(13)}
         }) {}
 };
 
