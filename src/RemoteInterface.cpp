@@ -8,9 +8,11 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
     this->rxPin = rxPin;
     
     // select first profile as a default
-    profiles[0].profileName = "A";
-    profiles[1].profileName = "B";
-    profiles[2].profileName = "C";
+    int i = 65;
+    for (auto &profile : profiles){
+      profile.profileName = static_cast<char>(i);
+      i++;
+    }
     // currentProfile = profiles[0];
     profiles[selectedProfile].profileName = "SAMSUNG PROFILE";
     profiles[selectedProfile].buttons["volumeUp"].rawData = 0xE0E0E01F;
@@ -19,12 +21,14 @@ RemoteInterface::RemoteInterface(int txPin, int rxPin){
     profiles[selectedProfile].buttons["volumeDown"].rawData = 0xE0E0D02F;
     profiles[selectedProfile].buttons["volumeDown"].bitLength = 32;
     profiles[selectedProfile].buttons["volumeDown"].protocol = SAMSUNG;
+    
 }
 
 void RemoteInterface::begin(){
   for (auto &pair : profiles[selectedProfile].buttons){
     pinMode(pair.second.pin, INPUT_PULLUP);
   }
+  pinMode(profileMode.pin, INPUT_PULLUP);
     // setup sender 
   IrSender.begin(this->txPin, ENABLE_LED_FEEDBACK);
 }
@@ -32,51 +36,18 @@ void RemoteInterface::begin(){
 void RemoteInterface::checkButtons(){
   
   for (auto &pair : profiles[selectedProfile].buttons){
-
-    bool pinState = digitalRead(pair.second.pin);
-
-    if(pinState != pair.second.lastButtonState){
-      // reset debounce time
-      pair.second.lastDebounceTime = millis();
+    if(ButtonDebounce(pair.second) == PRESSED){
+      std::string buttonName = pair.first;
+      const std::string &command = pair.first;
+      ButtonData &data = pair.second;
+      sender(command, data);
     }
-
-    if ((millis() - pair.second.lastDebounceTime) >= debounceDelay){
-      // only update stable state if it really changed
-      if (pinState != pair.second.buttonState){
-        pair.second.buttonState = pinState;
-
-        if (pair.second.buttonState == LOW){
-          std::string buttonName = pair.first;
-          if(buttonName == "set"){
-            ChangeProfile();
-            // Serial.println("Changed profile");
-          } else {
-            const std::string &command = pair.first;
-            ButtonData &data = pair.second;
-            // Serial.println("sending");
-            sender(command, data);
-            // Serial.println(pair.first.c_str());
-          }
-          
-        }
-      }
-    }
-    pair.second.lastButtonState = pinState;
   }
 
-
-
-
-
-    // for (auto &pair : (*this->currentProfile).buttons){
-    //     const std::string &command = pair.first;
-    //     ButtonData &data = pair.second;
-
-    //     int state = digitalRead(data.pin);
-    //     if (state == LOW) {
-    //       sender(command, data);
-    //     }
-    // }
+  if(ButtonDebounce(profileMode) == PRESSED){
+    ChangeProfile();
+  }
+  
 }
 
 void RemoteInterface::IRReceiveState(bool state){
@@ -135,4 +106,27 @@ void RemoteInterface::sender(const std::string &command, ButtonData &data){
           Serial.println("Unknown protocol, nothing sent.");
           break;
   }
+}
+
+RemoteInterface::ButtonEvent RemoteInterface::ButtonDebounce(BaseButton &button){
+  // read state of pin
+  bool pinState = digitalRead(button.pin);
+
+  if(pinState != button.lastButtonState){
+    // reset debounce time
+    button.lastDebounceTime = millis();
+  }
+
+  if ((millis() - button.lastDebounceTime) >= debounceDelay){
+    // only update stable state if it really changed
+    if (pinState != button.buttonState){
+      // this is the stable button state USE THIS
+      button.buttonState = pinState;
+      button.lastButtonState = pinState;
+      return (pinState == LOW) ? PRESSED : RELEASED;
+    }
+  }
+
+  button.lastButtonState = pinState;
+  return NONE;
 }

@@ -12,7 +12,7 @@ class RemoteInterface {
 private:
   int txPin;
   int rxPin;
-  int numProfiles = 3;
+  static constexpr int numProfiles = 5;
   
   const unsigned long debounceDelay = 20;
 
@@ -26,9 +26,16 @@ public:
   int selectedProfile = 0;
   ButtonMap currentProfile;
     // static array of profiles
-  ButtonMap profiles[3];
+  ButtonMap profiles[numProfiles];
 
-  BaseButton profileMode(int p = 25);
+  // button used to cycle through profiles
+  BaseButton profileMode = BaseButton(25);
+
+  enum ButtonEvent {
+    NONE,
+    PRESSED,
+    RELEASED
+  };
 
   //remote constructor
   RemoteInterface(int txPin, int rxPin);
@@ -53,6 +60,8 @@ public:
   std::string getButtonNameFromPin(int pin);
 
   void sender(const std::string &command, ButtonData &data);
+
+  ButtonEvent ButtonDebounce(BaseButton &button);
 
 };
 

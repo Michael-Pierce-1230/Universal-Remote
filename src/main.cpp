@@ -28,7 +28,7 @@ void setup(){
   // int numProfiles = sizeof(remote.profiles)/ sizeof(remote.profiles[0]);
   // setup ir transmitter
   remote.begin();
-  remote.IRReceiveState(true);
+  // remote.IRReceiveState(true); //Enable to receive rx data
   
   
 }
