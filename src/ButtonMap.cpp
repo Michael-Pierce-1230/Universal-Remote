@@ -38,10 +38,10 @@ struct ButtonMap{
     // ButtonMap constructor
     // assign pins to each button data
     ButtonMap(): buttons({
-            {"volumeUp",   ButtonData(4)},
-            {"volumeDown", ButtonData(5)},
-            {"power",      ButtonData(12)},
-            {"mute",       ButtonData(13)}
+            {"volumeUp",   ButtonData(25)},
+            {"volumeDown", ButtonData(27)},
+            {"power",      ButtonData(26)},
+            // {"mute",       ButtonData(14)}
         }) {}
 };
 

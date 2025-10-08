@@ -29,7 +29,7 @@ public:
   ButtonMap profiles[numProfiles];
 
   // button used to cycle through profiles
-  BaseButton profileMode = BaseButton(25);
+  BaseButton profileMode = BaseButton(14);
 
   enum ButtonEvent {
     NONE,
