@@ -4,19 +4,6 @@
 #define SCREEN_HEIGHT 32
 #define OLED_ADDR 0x3C
 
-// Simple 16x8 battery icons (black & white bitmaps)
-const unsigned char battery_empty [] PROGMEM = {
-  0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C
-};
-
-const unsigned char battery_half [] PROGMEM = {
-  0x3C, 0x42, 0x5A, 0x5A, 0x5A, 0x5A, 0x42, 0x3C
-};
-
-const unsigned char battery_full [] PROGMEM = {
-  0x3C, 0x7E, 0x7E, 0x7E, 0x7E, 0x7E, 0x7E, 0x3C
-};
-
 DisplayManager::DisplayManager(int sda, int scl)
     : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1), sdaPin(sda), sclPin(scl), I2CDisplay(TwoWire(0)){}
 
@@ -80,7 +67,7 @@ void DisplayManager::update(){
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
     display.setCursor(0,0);
-    // display.println("Time   WIFI   Battery");
+    display.println("Time   WIFI   Battery");
     // display.println(" ");
     // display.println("Selected profile");
     // display.drawBitmap(10, 10, wifiIcon, 5, 5, SSD1306_WHITE);
@@ -104,6 +91,7 @@ void DisplayManager::update(){
             break;
     }
 
+    // clear();
     display.drawBitmap(x, y, icon, 8, 8, SSD1306_WHITE);
     display.display();
 }

@@ -1,0 +1,38 @@
+#ifndef ICONS_H
+#define ICONS_H
+
+#include <Arduino.h>
+
+// Icon size definitions
+#define ICON_WIDTH_8 8
+#define ICON_HEIGHT_8  8
+#define ICON_WIDTH_16  16
+#define ICON_HEIGHT_16 16
+
+// Battery Icons (8x8)
+const unsigned char battery_empty [] PROGMEM = {
+  0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C
+};
+
+const unsigned char battery_half [] PROGMEM = {
+  0x3C, 0x42, 0x42, 0X42, 0X7E, 0X7E, 0X7E, 0x3C
+};
+
+const unsigned char battery_full [] PROGMEM = {
+  0x3C, 0x7E, 0x7E, 0x7E, 0x7E, 0x7E, 0x7E, 0x3C
+};
+
+// Wifi Icons (8x8)
+const unsigned char PROGMEM wifi_low[] = {
+  0x00, 0x18, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00
+};
+
+const unsigned char PROGMEM wifi_medium[] = {
+  0x00, 0x18, 0x24, 0x00, 0x18, 0x24, 0x00, 0x00
+};
+
+const unsigned char PROGMEM wifi_full[] = {
+  0x00, 0x18, 0x24, 0x42, 0x18, 0x24, 0x42, 0x00
+};
+
+#endif

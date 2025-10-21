@@ -1,5 +1,5 @@
 #include "RemoteInterface.h"
-#include "ButtonMap.h"
+// #include "ButtonMap.h"
 #include "display.h"
 
 const int TX_PIN = 17;
@@ -31,7 +31,9 @@ void setup(){
   remote.begin();
   // remote.IRReceiveState(true); //Enable to receive rx data
   display.begin();
-  display.drawBatteryIcon(0, 0, 1);
+  display.clear();
+  display.drawBatteryIcon(120, 0, 1);
+  // display.pageLayout();
  
 }
 
